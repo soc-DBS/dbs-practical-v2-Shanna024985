@@ -38,3 +38,39 @@ module.exports.updateByCode = function updateByCode(code, credit) {
         }
     })
 }
+
+module.exports.deleteByCode = function deleteByCode(code) {
+    return prisma.module.delete({
+        where: {
+            modCode: code
+        }
+    }).then(function (module) {
+        return module;
+    }).catch(function (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === "P2022") {
+                console.log("Module is not found in this table");
+            }
+        }
+    })
+}
+
+module.exports.retrieveAll = function retrieveAll() {
+    return prisma.module.findMany();
+}
+
+module.exports.retrieveByCode = function retrieveByCode(code) {
+    return prisma.module.findUnique({
+        where: {
+            modCode: code
+        }
+    }).then((module) => {
+        return module;
+    }).catch((error) => {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === "P2002") {
+                console.log("Module is not found in this table");
+            }
+        }
+    })
+}
